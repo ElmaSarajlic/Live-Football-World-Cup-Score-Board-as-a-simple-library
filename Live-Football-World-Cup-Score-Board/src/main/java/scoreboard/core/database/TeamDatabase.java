@@ -21,6 +21,9 @@ public class TeamDatabase {
         teams.add(new Team("7", "Italy"));
         teams.add(new Team("8", "Argentina"));
         teams.add(new Team("9", "Australia"));
+        teams.add(new Team("10", "Bosnia and Herzegovina"));
+        teams.add(new Team("11", "Cyprus"));
+
     }
 
     public List<Team> getTeams() {

@@ -18,17 +18,22 @@ public class Main {
         Team brazil = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("3")).findFirst().orElse(null);
         Team germany = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("4")).findFirst().orElse(null);
         Team france = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("5")).findFirst().orElse(null);
-        Team Uruguay = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("6")).findFirst().orElse(null);
-        Team Italy = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("7")).findFirst().orElse(null);
-        Team Argentina = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("8")).findFirst().orElse(null);
-        Team Australia = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("9")).findFirst().orElse(null);
+        Team uruguay = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("6")).findFirst().orElse(null);
+        Team italy = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("7")).findFirst().orElse(null);
+        Team argentina = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("8")).findFirst().orElse(null);
+        Team australia = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("9")).findFirst().orElse(null);
+        Team bosnia = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("10")).findFirst().orElse(null);
+        Team cyprus = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("11")).findFirst().orElse(null);
+
 
 
         matchService.startMatch(mexico, canada);
         matchService.startMatch(spain, brazil);
         matchService.startMatch(germany, france);
-        matchService.startMatch(Uruguay, Italy);
-        matchService.startMatch(Argentina, Australia);
+        matchService.startMatch(uruguay, italy);
+        matchService.startMatch(argentina, australia);
+        matchService.startMatch(bosnia, cyprus);
+
 
 
         updateScores(matchService, "Mexico", "Canada", 0, 5);
@@ -36,6 +41,8 @@ public class Main {
         updateScores(matchService, "Germany", "France", 2, 2);
         updateScores(matchService, "Uruguay", "Italy", 6, 6);
         updateScores(matchService, "Argentina", "Australia", 3, 1);
+        updateScores(matchService, "Bosnia and Herzegovina", "Cyprus", 2, 1);
+
 
 
         List<Match> sortedMatches = matchService.getSummary();
