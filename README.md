@@ -13,6 +13,12 @@ This library provides a simple in-memory solution to track and display scores fo
 - Java 11 or newer
 - Maven (for building the project and running tests)
 
+### Core Dependencies
+
+- **JUnit Jupiter (v5.9.2)**: Used for unit testing. This ensures that all functionalities are tested.
+- **Lombok (v1.18.30)**: Simplifies the codebase by reducing boilerplate code such as getters, setters, and constructors through annotations. This dependency is optional and provided at compile time.
+- **SLF4J (v2.0.7) and Logback (v1.4.7)**: Provides a logging framework to help with debugging and tracking the application's behavior in production.
+
 ### Installation
 1. Clone the repository:
    git clone https://github.com/ElmaSarajlic/Live-Football-World-Cup-Score-Board-as-a-simple-library.git
