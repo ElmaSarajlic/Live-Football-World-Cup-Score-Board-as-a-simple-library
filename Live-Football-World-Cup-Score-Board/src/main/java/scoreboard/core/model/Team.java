@@ -1,25 +1,20 @@
 package scoreboard.core.model;
 
 public class Team {
-    public int getId() {
+    private String id;
+    private String name;
+
+    public Team(String id, String name) {
+        this.id = id;
+
+        this.name = name;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    int id;
-    private String name;
-    private int score;
-
-    public Team(int id, String name, int score) {
-        this.id = id;
-        this.name = name;
-        this.score = score;
-    }
-
-    public Team(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -31,12 +26,5 @@ public class Team {
         this.name = name;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
 
 }

@@ -1,67 +1,56 @@
 package scoreboard.core;
 
 import scoreboard.core.database.TeamDatabase;
+import scoreboard.core.model.Match;
 import scoreboard.core.model.Team;
+import scoreboard.core.service.MatchService;
 
 import java.util.List;
 
 public class Main {
-
     public static void main(String[] args) {
+        MatchService matchService = new MatchService();
         TeamDatabase teamDatabase = new TeamDatabase();
 
-        // Run individual tests manually
-        testGetTeams(teamDatabase);
-        testUpdateScore(teamDatabase);
-        testAddNewTeam(teamDatabase);
-        testGetTeamById(teamDatabase);
+        Team mexico = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("0")).findFirst().orElse(null);
+        Team canada = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("1")).findFirst().orElse(null);
+        Team spain = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("2")).findFirst().orElse(null);
+        Team brazil = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("3")).findFirst().orElse(null);
+        Team germany = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("4")).findFirst().orElse(null);
+        Team france = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("5")).findFirst().orElse(null);
+        Team Uruguay = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("6")).findFirst().orElse(null);
+        Team Italy = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("7")).findFirst().orElse(null);
+        Team Argentina = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("8")).findFirst().orElse(null);
+        Team Australia = teamDatabase.getTeams().stream().filter(team -> team.getId().equals("9")).findFirst().orElse(null);
+
+
+        matchService.startMatch(mexico, canada);
+        matchService.startMatch(spain, brazil);
+        matchService.startMatch(germany, france);
+        matchService.startMatch(Uruguay, Italy);
+        matchService.startMatch(Argentina, Australia);
+
+
+        updateScores(matchService, "Mexico", "Canada", 0, 5);
+        updateScores(matchService, "Spain", "Brazil", 10, 2);
+        updateScores(matchService, "Germany", "France", 2, 2);
+        updateScores(matchService, "Uruguay", "Italy", 6, 6);
+        updateScores(matchService, "Argentina", "Australia", 3, 1);
+
+
+        List<Match> sortedMatches = matchService.getSummary();
+        sortedMatches.forEach(match ->
+                System.out.println(match.getHomeTeam().getName() + " " + match.getHomeScore() + " - " +
+                        match.getAwayTeam().getName() + " " + match.getAwayScore()));
     }
 
-    public static void testGetTeams(TeamDatabase teamDatabase) {
-        List<Team> teams = teamDatabase.getTeams();
-        System.out.println("Testing getTeams...");
-        if (teams != null && teams.size() == 10) {
-            System.out.println("getTeams Test Passed!");
-        } else {
-            System.out.println("getTeams Test Failed!");
-        }
-    }
-
-    public static void testUpdateScore(TeamDatabase teamDatabase) {
-        List<Team> teams = teamDatabase.getTeams();
-        Team mexico = teams.stream().filter(team -> team.getName().equals("Mexico")).findFirst().orElse(null);
-        if (mexico != null) {
-            mexico.setScore(5);
-            if (mexico.getScore() == 5) {
-                System.out.println("updateScore Test Passed!");
-            } else {
-                System.out.println("updateScore Test Failed!");
-            }
-        } else {
-            System.out.println("updateScore Test Failed!");
-        }
-    }
-
-    public static void testAddNewTeam(TeamDatabase teamDatabase) {
-        List<Team> teams = teamDatabase.getTeams();
-        Team newTeam = new Team(10, "Brazil", 0);
-        teams.add(newTeam);
-
-        if (teams.stream().anyMatch(team -> team.getName().equals("Brazil"))) {
-            System.out.println("addNewTeam Test Passed!");
-        } else {
-            System.out.println("addNewTeam Test Failed!");
-        }
-    }
-
-    public static void testGetTeamById(TeamDatabase teamDatabase) {
-        List<Team> teams = teamDatabase.getTeams();
-        Team brazil = teams.stream().filter(team -> team.getId() == 3).findFirst().orElse(null);
-
-        if (brazil != null && brazil.getName().equals("Brazil")) {
-            System.out.println("getTeamById Test Passed!");
-        } else {
-            System.out.println("getTeamById Test Failed!");
+    private static void updateScores(MatchService service, String home, String away, int homeScore, int awayScore) {
+        Match match = service.getSummary().stream()
+                .filter(m -> m.getHomeTeam().getName().equals(home) && m.getAwayTeam().getName().equals(away))
+                .findFirst()
+                .orElse(null);
+        if (match != null) {
+            service.updateScore(match, homeScore, awayScore);
         }
     }
 }

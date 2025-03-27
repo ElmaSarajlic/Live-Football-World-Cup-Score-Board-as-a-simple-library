@@ -1,53 +1,67 @@
 package scoreboard.core.service;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import scoreboard.core.model.Match;
 import scoreboard.core.model.Team;
-import scoreboard.core.database.TeamDatabase;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMatchService {
-
-    private MatchService matchService;
-    private TeamDatabase teamDatabase;
+    private MatchService service;
+    private Team homeTeam;
+    private Team awayTeam;
 
     @BeforeEach
-    public void setup() {
-        teamDatabase = new TeamDatabase(); // Initialize the TeamDatabase
-        matchService = new MatchService(); // Initialize the MatchService
+    void setUp() {
+        service = new MatchService();
+        homeTeam = new Team("1", "Home Team");
+        awayTeam = new Team("2", "Away Team");
     }
 
+    @Test
+    public void testStartMatch() {
+        service.startMatch(homeTeam, awayTeam);
+        assertEquals(1, service.getSummary().size(), "There should be one match in the scoreboard after starting a match.");
+    }
 
     @Test
     public void testUpdateScore() {
-        Team mexico = teamDatabase.getTeams().get(0);
-        Team canada = teamDatabase.getTeams().get(1);
+        service.startMatch(homeTeam, awayTeam);
+        Match match = service.getSummary().get(0);
+        service.updateScore(match, 3, 2);
 
-        matchService.startNewMatch(mexico, canada); // Start the match
-        matchService.updateScore(mexico, 2, canada, 5); // Update score (Mexico 2 - Canada 5)
-
-        List<Match> matches = matchService.getSummary(); // Get the current matches
-        Match match = matches.get(0);
-
-        // Verify score update
-        assertEquals(2, match.getTeam1().getScore(), "Home score should be updated to 2");
-        assertEquals(5, match.getTeam2().getScore(), "Away score should be updated to 5");
+        match = service.getSummary().get(0);
+        assertEquals(3, match.getHomeScore(), "Home score updated to 3.");
+        assertEquals(2, match.getAwayScore(), "Away score updated to 2.");
     }
 
     @Test
     public void testFinishMatch() {
-        Team mexico = teamDatabase.getTeams().get(0);
-        Team canada = teamDatabase.getTeams().get(1);
+        service.startMatch(homeTeam, awayTeam);
+        Match match = service.getSummary().get(0);
+        service.finishMatch(match);
+        assertTrue(service.getSummary().isEmpty(), "Scoreboard is empty after finishing the match.");
+    }
 
-        matchService.startNewMatch(mexico, canada); // Start the match
-        matchService.finishMatch(mexico, canada); // Finish the match
+    @Test
+    public void testGetSummaryOrder() {
+        Team team1 = new Team("3", "Team1");
+        Team team2 = new Team("4", "Team2");
+        Team team3 = new Team("5", "Team3");
+        Team team4 = new Team("6", "Team4");
 
-        // Verify match removal
-        List<Match> matches = matchService.getSummary(); // Get the current matches
-        assertTrue(matches.isEmpty(), "Match should be removed from the scoreboard after finishing");
+        service.startMatch(team3, team4);
+        try { Thread.sleep(10); } catch (InterruptedException e) { e.printStackTrace(); }
+        service.startMatch(team1, team2);
+
+        service.updateScore(service.getSummary().get(0), 5, 3);
+        service.updateScore(service.getSummary().get(1), 1, 1);
+
+        List<Match> summary = service.getSummary();
+
+        assertEquals("Team3", summary.get(0).getHomeTeam().getName(), "Team3 is first in the summary because of the higher score.");
+        assertEquals("Team1", summary.get(1).getHomeTeam().getName(), "Team1 is second in the summary.");
     }
 }
