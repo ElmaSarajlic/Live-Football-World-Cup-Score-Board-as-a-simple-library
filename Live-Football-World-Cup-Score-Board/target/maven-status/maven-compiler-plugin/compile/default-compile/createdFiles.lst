@@ -1,6 +1,0 @@
-scoreboard\core\database\TeamDatabase.class
-scoreboard\core\Main.class
-scoreboard\core\model\Team.class
-scoreboard\core\service\MatchService.class
-scoreboard\core\service\TeamService.class
-scoreboard\core\model\Match.class
